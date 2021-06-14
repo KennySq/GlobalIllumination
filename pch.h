@@ -22,7 +22,14 @@
 
 #include<wrl.h>
 
+#include<string>
+#include<iostream>
+#include<vector>
+#include<unordered_map>
+
 #include"Hardware.h"
+
+#include"MemoryBank.h"
 
 
 #endif //PCH_H

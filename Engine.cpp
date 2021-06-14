@@ -7,7 +7,6 @@ using namespace Resources;
 Engine::Engine(HWND handle, HINSTANCE handleInst, unsigned int width, unsigned height)
 	: mHardware(Hardware::GetInstance(width, height, handle, handleInst)), mMainDisplay(width, height)
 {
-	
 	Init();
 }
 
@@ -25,6 +24,13 @@ void Engine::Init()
 
 	mScreenTex = new Buffer2D(width, height);
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
+
+	MemoryBank* memory = MemoryBank::GetInstance();
+	memory->Find("Hello World");
+	memory->Find("Hello World");
+	memory->Find("HelloWorld");
+
+
 
 }
 

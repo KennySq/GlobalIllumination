@@ -44,8 +44,6 @@ namespace Resources
 
 		virtual void Generate() override;
 		virtual void Release() override;
-	
-	
 	};
 
 	class Buffer2D : public IMemory

@@ -26,9 +26,6 @@ void Engine::Init()
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
 
 	MemoryBank* memory = MemoryBank::GetInstance();
-	memory->Find("Hello World");
-	memory->Find("Hello World");
-	memory->Find("HelloWorld");
 
 
 

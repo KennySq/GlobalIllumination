@@ -2,11 +2,13 @@
 
 using namespace std;
 
+// MemoryBank has been made as singleton pattern
+// Since Hardware does not resource allocate or release, MemoryBank is the only class that allocate resources dynamically except for d3d interaces.
 class MemoryBank
 {
 public:
 
-	const string& Find(const char* value);
+	static const string& Find(const char* value);
 
 	MemoryBank() {}
 	~MemoryBank() {}
@@ -17,9 +19,8 @@ public:
 		{
 			mInstance = new MemoryBank();
 		}
-
+		
 		return mInstance;
-	
 	}
 
 private:

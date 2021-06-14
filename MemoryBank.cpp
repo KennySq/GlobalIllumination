@@ -5,16 +5,18 @@ MemoryBank* MemoryBank::mInstance = nullptr;
 
 const string& MemoryBank::Find(const char* value)
 {
-    long long key = make_hash(value);
+    auto inst = MemoryBank::GetInstance();
 
-    if (mStringMap.find(key) != mStringMap.cend())
+    long long key = inst->make_hash(value);
+
+    if (inst->mStringMap.find(key) != inst->mStringMap.cend())
     {
-        return mStringMap[key];
+        return inst->mStringMap[key];
     }
     
     std::pair<long long, string> stringPair = std::pair<long long, string>(key, string(value));
 
-    mStringMap.insert(stringPair);
+    inst->mStringMap.insert(stringPair);
 
     return stringPair.second;
 }

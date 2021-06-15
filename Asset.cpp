@@ -45,7 +45,7 @@ bool Assets::AssetModel::openFBX()
 
 	bool result = importer->Initialize(mPath.c_str(), -1, manager->GetIOSettings());
 
-	if (result == false);
+	if (result == false)
 	{
 		return false;
 	}
@@ -58,7 +58,7 @@ bool Assets::AssetModel::openFBX()
 
 	FbxNode* root = mainScene->GetRootNode();
 
-	FbxAxisSystem::MayaYUp.ConvertScene(mainScene); // optional
+	//FbxAxisSystem::MayaYUp.ConvertScene(mainScene); // optional
 
 	FbxGeometryConverter converter(manager);
 
@@ -66,16 +66,21 @@ bool Assets::AssetModel::openFBX()
 	
 	fbxLoadNode(root);
 
+	delete positions;
+	delete normals;
+	delete texcoords;
+
 	return true;
 }
 
 void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 {
+	auto device = Hardware::GetDevice();
 	const int childCount = node->GetChildCount();
 	
 	vector<StaticVertex> vertices;
 	vector<unsigned int> indices;
-	unordered_map<StaticVertex, unsigned int> indexMap;
+	map<StaticVertex, unsigned int> indexMap;
 
 	FbxNodeAttribute* nodeAttr = node->GetNodeAttribute();
 
@@ -84,6 +89,14 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 		if (nodeAttr->GetAttributeType() == FbxNodeAttribute::eMesh)
 		{
 			FbxMesh* mesh = node->GetMesh();
+
+			HRESULT result;
+			D3D11_BUFFER_DESC vbufferDesc{};
+			D3D11_BUFFER_DESC ibufferDesc{};
+			D3D11_SUBRESOURCE_DATA subData{};
+			ComPtr<ID3D11Buffer> vbuffer;
+			ComPtr<ID3D11Buffer> ibuffer;
+
 			fbxGetControlPoints(mesh);
 
 			unsigned int triCount = mesh->GetPolygonCount();
@@ -103,9 +116,40 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 
 					fbxAddVertex(vertex, indexMap, vertices, indices);
 
+
+
 					vertexCount++;
 				}
 			}
+
+			vbufferDesc.ByteWidth = sizeof(StaticVertex) * vertices.size();
+			vbufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			vbufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+			ibufferDesc.ByteWidth = sizeof(unsigned int) * indices.size();
+			ibufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+			ibufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+			subData.pSysMem = vertices.data();
+
+			result = device->CreateBuffer(&vbufferDesc, &subData, vbuffer.GetAddressOf());
+			if (result != S_OK)
+			{
+				MessageBoxA(nullptr, "failed to create vertex buffer. (fbx)", nullptr, 0);
+				DebugLog("failed to create vertex buffer. (fbx)");
+			}
+
+			subData.pSysMem = indices.data();
+
+			result = device->CreateBuffer(&ibufferDesc, &subData, ibuffer.GetAddressOf());
+			if (result != S_OK)
+			{
+				MessageBoxA(nullptr, "failed to create index buffer. (fbx)", nullptr, 0);
+				DebugLog("failed to create index buffer. (fbx)");
+			}
+
+			mVertexList.emplace_back(vbuffer);
+			mIndexList.emplace_back(ibuffer);
 
 		}
 	}
@@ -137,7 +181,7 @@ XMFLOAT2 Assets::AssetModel::fbxGetUV(FbxMesh* mesh, unsigned int cpi, unsigned 
 {
 	if (mesh->GetElementNormalCount() < 1)
 	{
-		return;
+		return XMFLOAT2(0,0);
 	}
 
 	FbxGeometryElementUV* vertexUV = mesh->GetElementUV(0);
@@ -171,8 +215,6 @@ XMFLOAT2 Assets::AssetModel::fbxGetUV(FbxMesh* mesh, unsigned int cpi, unsigned 
 			texcoord.x = static_cast<float>(vertexUV->GetDirectArray().GetAt(cpi).mData[0]);
 			texcoord.y = static_cast<float>(vertexUV->GetDirectArray().GetAt(cpi).mData[1]);
 			break;
-		default:
-			return;
 		}
 	}
 	break;
@@ -181,7 +223,7 @@ XMFLOAT2 Assets::AssetModel::fbxGetUV(FbxMesh* mesh, unsigned int cpi, unsigned 
 	return texcoord;
 }
 
-void Assets::AssetModel::fbxAddVertex(StaticVertex vertex, unordered_map<StaticVertex, unsigned int>& indexMap, vector<StaticVertex>& vertices, vector<unsigned int>& indices)
+void Assets::AssetModel::fbxAddVertex(StaticVertex vertex, map<StaticVertex, unsigned int>& indexMap, vector<StaticVertex>& vertices, vector<unsigned int>& indices)
 {
 	auto lookup = indexMap.find(vertex);
 	if (lookup != indexMap.end())
@@ -203,7 +245,7 @@ XMFLOAT3 Assets::AssetModel::fbxGetNormal(FbxMesh* mesh, unsigned int cpi, unsig
 {
 	if (mesh->GetElementNormalCount() < 1)
 	{
-		return;
+		return XMFLOAT3(0, 0, 0);
 	}
 
 	FbxGeometryElementNormal* vertexNormal = mesh->GetElementNormal(0);
@@ -240,8 +282,6 @@ XMFLOAT3 Assets::AssetModel::fbxGetNormal(FbxMesh* mesh, unsigned int cpi, unsig
 						normal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[1]);
 						normal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[2]);
 						break;
-					default:
-						return;
 				}
 			}
 				break;

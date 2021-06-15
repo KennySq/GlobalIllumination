@@ -51,6 +51,12 @@
     <ClInclude Include="MemoryBank.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Geometry.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalIllumination.cpp">
@@ -81,6 +87,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MemoryBank.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Geometry.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

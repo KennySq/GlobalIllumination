@@ -3,6 +3,7 @@
 #include "IRoutine.h"
 
 #include"ResourceManager.h"
+#include"Asset.h"
 
 using namespace Resources;
 
@@ -25,6 +26,8 @@ private:
 
     Buffer2D* mScreenTex;
     Tex2D* mDepthTex;
+
+    Assets::AssetModel* mAsset_Roman;
 
     virtual void Init() override;
     virtual void Release() override;

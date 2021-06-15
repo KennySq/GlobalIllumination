@@ -3,6 +3,7 @@
 #include"ResourceManager.h"
 
 using namespace Resources;
+using namespace Assets;
 
 Engine::Engine(HWND handle, HINSTANCE handleInst, unsigned int width, unsigned height)
 	: mHardware(Hardware::GetInstance(width, height, handle, handleInst)), mMainDisplay(width, height)
@@ -25,9 +26,11 @@ void Engine::Init()
 	mScreenTex = new Buffer2D(width, height);
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
 
+	mAsset_Roman = new AssetModel("roman/roman.fbx");
+	mAsset_Roman->Open();
 	MemoryBank* memory = MemoryBank::GetInstance();
 
-
+	
 
 }
 

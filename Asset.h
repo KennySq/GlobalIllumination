@@ -36,11 +36,11 @@ namespace Assets
 		void fbxGetControlPoints(FbxMesh* mesh);
 		XMFLOAT3 fbxGetNormal(FbxMesh* mesh, unsigned int cpi, unsigned int vertexCount);
 		XMFLOAT2 fbxGetUV(FbxMesh* mesh, unsigned int cpi, unsigned int vertexCount);
-		void fbxAddVertex(StaticVertex vertex, unordered_map<StaticVertex, unsigned int>& indexMap
+		void fbxAddVertex(StaticVertex vertex, map<StaticVertex, unsigned int>& indexMap
 		, vector<StaticVertex>& vertices, vector<unsigned int>& indices);
 		
 		
-		bool openOBJ();
+		//bool openOBJ();
 
 		XMFLOAT3* positions = nullptr;
 		XMFLOAT3* normals = nullptr;

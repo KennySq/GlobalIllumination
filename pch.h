@@ -29,10 +29,11 @@
 #include<iostream>
 #include<vector>
 #include<unordered_map>
+#include<map>
 
 #include"Hardware.h"
 
 #include"MemoryBank.h"
-
+#include"Utility.h"
 
 #endif //PCH_H

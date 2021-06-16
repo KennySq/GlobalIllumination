@@ -18,7 +18,7 @@ const string& MemoryBank::Find(const char* value)
 
     inst->mStringMap.insert(stringPair);
 
-    return stringPair.second;
+    return inst->mStringMap[key];
 }
 
 long long MemoryBank::make_hash(string value)

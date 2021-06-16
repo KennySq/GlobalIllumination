@@ -9,7 +9,7 @@ Assets::AssetModel::AssetModel(const char* path)
 {
 	string ext = mPath.substr(mPath.find_first_of("."));
 
-	if (ext == "fbx")
+	if (ext == ".fbx")
 	{
 		mType = MODEL_TYPE::MODEL_FBX;
 	}
@@ -66,9 +66,9 @@ bool Assets::AssetModel::openFBX()
 	
 	fbxLoadNode(root);
 
-	delete positions;
-	delete normals;
-	delete texcoords;
+	delete mPositions;
+	delete mNormals;
+	delete mTexcoords;
 
 	return true;
 }
@@ -99,6 +99,7 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 
 			fbxGetControlPoints(mesh);
 
+
 			unsigned int triCount = mesh->GetPolygonCount();
 			unsigned int vertexCount = 0;
 
@@ -108,7 +109,7 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 				{
 					int cpi = mesh->GetPolygonVertex(i, j);
 
-					XMFLOAT3 position = positions[cpi];
+					XMFLOAT3 position = mPositions[cpi];
 					XMFLOAT3 normal = fbxGetNormal(mesh, cpi, vertexCount);
 					XMFLOAT2 texcoord = fbxGetUV(mesh, cpi, vertexCount);
 
@@ -163,8 +164,12 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 void Assets::AssetModel::fbxGetControlPoints(FbxMesh* mesh)
 {
 	unsigned int count = mesh->GetControlPointsCount();
-	
-	positions = new XMFLOAT3[count];
+	unsigned int normalCount = mesh->GetElementNormalCount();
+	unsigned int texcoordCount = mesh->GetElementUVCount();
+
+	mPositions = new XMFLOAT3[count];
+	mNormals = new XMFLOAT3[normalCount];
+	mTexcoords = new XMFLOAT2[texcoordCount];
 
 	for (unsigned int i = 0; i < count; i++)
 	{
@@ -173,6 +178,8 @@ void Assets::AssetModel::fbxGetControlPoints(FbxMesh* mesh)
 		pos.x = static_cast<float>(mesh->GetControlPointAt(i).mData[0]);
 		pos.y = static_cast<float>(mesh->GetControlPointAt(i).mData[1]);
 		pos.z = static_cast<float>(mesh->GetControlPointAt(i).mData[2]);
+	
+		mPositions[i] = pos;
 	}
 
 }

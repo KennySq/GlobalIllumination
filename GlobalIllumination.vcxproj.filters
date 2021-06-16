@@ -57,6 +57,15 @@
     <ClInclude Include="Utility.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalIllumination.cpp">
@@ -95,6 +104,15 @@
     <ClCompile Include="Utility.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GlobalIllumination.rc">
@@ -108,5 +126,11 @@
     <Image Include="GlobalIllumination.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DefaultVS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Constants.hlsli" />
   </ItemGroup>
 </Project>

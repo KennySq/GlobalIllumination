@@ -5,6 +5,8 @@
 #include"ResourceManager.h"
 #include"Asset.h"
 
+#include"Camera.h"
+
 using namespace Resources;
 
 class Engine :
@@ -26,6 +28,8 @@ private:
 
     Buffer2D* mScreenTex;
     Tex2D* mDepthTex;
+
+    Camera* mMainCamera;
 
     Assets::AssetModel* mAsset_Roman;
 

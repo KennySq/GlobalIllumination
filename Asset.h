@@ -42,9 +42,9 @@ namespace Assets
 		
 		//bool openOBJ();
 
-		XMFLOAT3* positions = nullptr;
-		XMFLOAT3* normals = nullptr;
-		XMFLOAT2* texcoords = nullptr;
+		XMFLOAT3* mPositions = nullptr;
+		XMFLOAT3* mNormals = nullptr;
+		XMFLOAT2* mTexcoords = nullptr;
 
 		MODEL_TYPE mType;
 

@@ -7,6 +7,8 @@
 #ifndef PCH_H
 #define PCH_H
 
+#define FBXSDK_SHARED
+
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")

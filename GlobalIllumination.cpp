@@ -124,6 +124,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
+#ifdef _DEBUG | DEBUG
+   AllocConsole();
+#endif
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 

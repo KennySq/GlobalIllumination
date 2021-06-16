@@ -1,6 +1,7 @@
 #pragma once
+#include"Shader.h"
 
-enum class PASS_TYPE
+enum PASS_TYPE
 {
 	eVertex = 1,
 	eGeometry = 2,
@@ -13,7 +14,6 @@ enum class PASS_TYPE
 class Compiler
 {
 public:
-	static bool compile(const char* path, const char* entry, const char* model, unsigned int passType);
-
+	static bool Compile(const char* path, unsigned int passType, Shader* shader);
+	static bool Reflect(ID3DBlob* vertexBlob, Shader* shader);
 };
-

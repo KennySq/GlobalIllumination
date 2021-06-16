@@ -27,6 +27,8 @@ bool Assets::AssetModel::Open()
 
 	}
 
+	MemoryBank::AddModel(this);
+
 	return true;
 }
 
@@ -150,7 +152,7 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 			}
 
 			mVertexList.emplace_back(vbuffer);
-			mIndexList.emplace_back(ibuffer);
+			mIndex = ibuffer;
 
 		}
 	}
@@ -244,6 +246,8 @@ void Assets::AssetModel::fbxAddVertex(StaticVertex vertex, map<StaticVertex, uns
 		indices.emplace_back(index);
 		vertices.emplace_back(vertex);
 	}
+
+	mIndexCount = indices.size();
 
 
 }

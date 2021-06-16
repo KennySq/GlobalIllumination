@@ -66,6 +66,9 @@
     <ClInclude Include="Shader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Instance.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalIllumination.cpp">
@@ -113,6 +116,9 @@
     <ClCompile Include="Shader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GlobalIllumination.rc">
@@ -128,9 +134,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="DefaultVS.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Constants.hlsli" />
+    <None Include="resources\shaders\Constants.hlsli" />
+    <None Include="resources\shaders\Default.hlsl" />
   </ItemGroup>
 </Project>

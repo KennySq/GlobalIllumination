@@ -17,11 +17,14 @@ namespace Assets
 		Asset(const char* path);
 		virtual bool Open() = 0;
 		virtual void Close() = 0;
+
+		const char* GetPath() const { return mPath.c_str(); }
+
 	protected:
 		const string& mPath;
 	};
 
-	class AssetModel : Asset
+	class AssetModel : public Asset
 	{
 	public:
 		AssetModel(const char* path);
@@ -29,6 +32,9 @@ namespace Assets
 		virtual bool Open() override;
 		virtual void Close() override;
 
+		ID3D11Buffer* GetVertex(unsigned int i) const { return mVertexList[i].Get(); }
+		ID3D11Buffer* GetIndex() const { return mIndex.Get(); }
+		unsigned int GetIndexCount() const { return mIndexCount; }
 	private:
 		bool openFBX();
 		// ** CAUTION, This method is recursive. **
@@ -46,10 +52,12 @@ namespace Assets
 		XMFLOAT3* mNormals = nullptr;
 		XMFLOAT2* mTexcoords = nullptr;
 
+		unsigned int mIndexCount;
+
 		MODEL_TYPE mType;
 
 		vector<ComPtr<ID3D11Buffer>> mVertexList;
-		vector<ComPtr<ID3D11Buffer>> mIndexList;
+		ComPtr<ID3D11Buffer> mIndex;
 	};
 
 }

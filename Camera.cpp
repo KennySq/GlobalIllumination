@@ -7,12 +7,19 @@ Camera::Camera(XMFLOAT3 pos, XMFLOAT3 dir, float fov, float aspectRatio)
 	HRESULT result;
 	auto device = Hardware::GetDevice();
 
-	XMVECTOR position = XMLoadFloat4(&XMFLOAT4(pos.x, pos.y, pos.z, 1.0f));
-	XMVECTOR direction = XMVector4Normalize(XMLoadFloat4(&XMFLOAT4(dir.x, dir.y, dir.z, 1.0)));
+	XMFLOAT4 posflt4 = XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
+	XMFLOAT4 dirflt4 = XMFLOAT4(dir.x, dir.y, dir.z, 1.0);
+
+	XMVECTOR position = XMLoadFloat4(&posflt4);
+	XMVECTOR direction = XMVector4Normalize(XMLoadFloat4(&dirflt4));
 
 	
-	XMStoreFloat4x4(&mRaw.mView, XMMatrixLookToLH(position, direction, XMVectorSet(0, 1, 0, 0)));
-	XMStoreFloat4x4(&mRaw.mProjection, XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.01, 1000.0));
+	XMStoreFloat4x4(&mRaw.mView, XMMatrixTranspose(XMMatrixLookToLH(position, direction, XMVectorSet(0, 1, 0, 0))));
+	XMStoreFloat4x4(&mRaw.mProjection, XMMatrixTranspose( XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.01, 1000.0)));
+
+	//XMStoreFloat4x4(&mRaw.mView, XMMatrixLookToLH(position, direction, XMVectorSet(0, 1, 0, 0)));
+	//XMStoreFloat4x4(&mRaw.mProjection, XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.01, 1000.0));
+
 
 	D3D11_BUFFER_DESC bufferDesc{};
 	D3D11_SUBRESOURCE_DATA subData{};

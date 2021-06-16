@@ -6,6 +6,7 @@
 #include"Asset.h"
 
 #include"Camera.h"
+#include"Shader.h"
 
 using namespace Resources;
 
@@ -32,8 +33,14 @@ private:
     Camera* mMainCamera;
 
     Assets::AssetModel* mAsset_Roman;
+    Shader* mShader_Default;
 
     virtual void Init() override;
     virtual void Release() override;
+
+    void bindBuffer();
+    void drawInstance(Instance* inst);
+
+
 };
 

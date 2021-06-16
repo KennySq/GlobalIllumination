@@ -18,6 +18,8 @@ public:
 	void Bind(const ID3D11RenderTargetView* rtv);
 	const ID3D11RenderTargetView* GetResource() const { return mRenderTarget; }
 
+	const D3D11_VIEWPORT& GetViewport() const { return mViewport; }
+
 private:
 	Display(const Display&) = delete;
 
@@ -28,6 +30,8 @@ private:
 	float mV; // 0.0 ~ 1.0
 
 	float mAspectRatio;
+
+	D3D11_VIEWPORT mViewport;
 
 	const ID3D11RenderTargetView* mRenderTarget;
 

@@ -5,20 +5,98 @@ MemoryBank* MemoryBank::mInstance = nullptr;
 
 const string& MemoryBank::Find(const char* value)
 {
-    auto inst = MemoryBank::GetInstance();
+    static MemoryBank* inst = MemoryBank::GetInstance();
 
     long long key = inst->make_hash(value);
 
-    if (inst->mStringMap.find(key) != inst->mStringMap.cend())
+    if (inst->mStrings.find(key) != inst->mStrings.cend())
     {
-        return inst->mStringMap[key];
+        return inst->mStrings[key];
     }
     
     std::pair<long long, string> stringPair = std::pair<long long, string>(key, string(value));
 
-    inst->mStringMap.insert(stringPair);
+    inst->mStrings.insert(stringPair);
 
-    return inst->mStringMap[key];
+    return inst->mStrings[key];
+}
+
+Assets::AssetModel* MemoryBank::FindModel(const char* name)
+{
+    static MemoryBank* inst = MemoryBank::GetInstance();
+
+    long long key = inst->make_hash(name);
+
+    if (inst->mModels.find(key) != inst->mModels.cend())
+    {
+        return inst->mModels[key];
+    }
+
+    return nullptr;
+}
+
+void MemoryBank::AddModel(Assets::AssetModel* model)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+
+    if (model == nullptr)
+    {
+        DebugLog("failed to add a model, the pointer was invalid.");
+        return;
+    }
+
+    const char* name = model->GetPath();
+    long long key = memory->make_hash(name);
+
+    std::pair<long long, Assets::AssetModel*> modelPair = std::pair<long long, Assets::AssetModel*>(key, model);
+
+    memory->mModels.insert(modelPair);
+
+    return;
+}
+
+Instance* MemoryBank::FindInstance(long long iid)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+    return memory->mInstances[iid];
+}
+
+void MemoryBank::AddInstance(Instance* inst)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+
+    if (inst == nullptr)
+    {
+        DebugLog("failed to add instance, invalid pointer.");
+        return;
+    }
+
+    memory->mInstances.emplace_back(inst);
+}
+
+void MemoryBank::AddShader(Shader* shader)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+
+    if (shader == nullptr)
+    {
+        DebugLog("failed to add a shader, invalid pointer.");
+        return;
+    }
+
+    const char* name = shader->GetPath();
+    long long key = memory->make_hash(name);
+
+    std::pair<long long, Shader*> shaderPair = std::pair<long long, Shader*>(key, shader);
+
+    memory->mShaders.insert(shaderPair);
+
+}
+
+Shader* MemoryBank::FindShader(const char* name)
+{
+    MemoryBank* memory = MemoryBank::GetInstance();
+    return memory->mShaders[memory->make_hash(name)];
 }
 
 long long MemoryBank::make_hash(string value)

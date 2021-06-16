@@ -1,13 +1,29 @@
 #include "pch.h"
 #include "Shader.h"
 
-bool Assets::Shader::Open()
+Shader::Shader(const char* path, unsigned int passType)
+	:	Asset(path)
 {
+	Compiler::Compile(path, passType, this);
 
-
-    return true;
+	MemoryBank::AddShader(this);
 }
 
-void Assets::Shader::Close()
+Shader::~Shader()
+{
+	mVertex.ReleaseAndGetAddressOf();
+	mGeometry.ReleaseAndGetAddressOf();
+	mDomain.ReleaseAndGetAddressOf();
+	mHull.ReleaseAndGetAddressOf();
+	mPixel.ReleaseAndGetAddressOf();
+	mCompute.ReleaseAndGetAddressOf();
+}
+
+bool Shader::Open()
+{
+	return false;
+}
+
+void Shader::Close()
 {
 }

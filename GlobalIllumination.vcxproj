@@ -127,10 +127,11 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,6 +157,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Instance.h" />
     <ClInclude Include="IRoutine.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Engine.h" />
@@ -175,6 +177,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Instance.cpp" />
     <ClCompile Include="IRoutine.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -200,15 +203,12 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="DefaultVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
+    <None Include="resources\shaders\Constants.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Constants.hlsli" />
+    <None Include="resources\shaders\Default.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

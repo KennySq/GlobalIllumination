@@ -22,10 +22,12 @@
 #include<d3d11.h>
 #include<dxgi.h>
 #include<d3dcompiler.h>
+#include<d3d11shader.h>
 #include<DirectXMath.h>
 #include<DirectXColors.h>
 
 #include<wrl.h>
+#include<atlbase.h>
 
 #include<string>
 #include<iostream>
@@ -37,5 +39,6 @@
 
 #include"MemoryBank.h"
 #include"Utility.h"
+#include "Compiler.h"
 
 #endif //PCH_H

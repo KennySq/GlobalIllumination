@@ -1,5 +1,7 @@
 #include"Constants.hlsli"
 
+StructuredBuffer<InstanceBuffer> gInstance : register(t0);
+
 struct StaticVertex
 {
 	float4 mPosition : POSITION0;
@@ -18,11 +20,11 @@ PixelInput vert(StaticVertex vertex)
 {
 	PixelInput output = (PixelInput)0;
 	
-	output.mPosition = mul(vertex.mPosition, gWorld);
+	output.mPosition = mul(vertex.mPosition, gInstance[0].mWorld);
     output.mPosition = mul(output.mPosition, gView);
     output.mPosition = mul(output.mPosition, gProjection);
 	
-	output.mNormal = float4(mul(vertex.mNormal, (float3x3) gWorld), 1.0f);
+    output.mNormal = float4(mul(vertex.mNormal, (float3x3) gInstance[0].mWorld), 1.0f);
 	output.mTexcoord = vertex.mTexcoord;
 
 	return output;

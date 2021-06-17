@@ -13,6 +13,9 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "libfbxsdk.lib")
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "uuid.lib")
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
@@ -25,6 +28,7 @@
 #include<d3d11shader.h>
 #include<DirectXMath.h>
 #include<DirectXColors.h>
+#include<dinput.h>
 
 #include<wrl.h>
 #include<atlbase.h>
@@ -40,5 +44,6 @@
 #include"MemoryBank.h"
 #include"Utility.h"
 #include "Compiler.h"
+#include"Input.h"
 
 #endif //PCH_H

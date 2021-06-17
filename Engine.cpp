@@ -32,8 +32,10 @@ void Engine::Init()
 	AssetModel* handModel = new AssetModel("resources/hand/hand.fbx");
 	handModel->Open();
 
-	mMainCamera = new Camera({ -200,-350,0 }, { 1,0,0 }, XMConvertToRadians(90.0f), mMainDisplay.GetAspectRatio());
+	mMainCamera = new Camera({ -200,-200,-200 }, { 1,0,0 }, XMConvertToRadians(90.0f), mMainDisplay.GetAspectRatio());
 	mShader_Default = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
+
+	mInput = new Input(width, height);
 
 	Instance* instance1 = new Instance("instance 1");
 	instance1->BindModel("resources/roman/roman.fbx");
@@ -50,6 +52,12 @@ void Engine::Update(float delta)
 	context->ClearDepthStencilView(mDepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0, 0);
 
 	mMainCamera->Update(delta);
+	mInput->Update(delta);
+
+	if (mInput->GetKey('W'))
+	{
+
+	}
 
 	drawInstance(inst1);
 }
@@ -81,7 +89,7 @@ void Engine::drawInstance(Instance* inst)
 	AssetModel* model = inst->GetModel();
 
 	ID3D11Buffer* buffer = inst->GetBuffer();
-	ID3D11Buffer* buffers[] = { mMainCamera->GetBuffer(), inst->GetBuffer() };
+	ID3D11Buffer* buffers[] = { mMainCamera->GetBuffer() };
 	ID3D11Buffer* vertexBuffers[] = { model->GetVertex(0) };
 	ID3D11Buffer* indexBuffers = model->GetIndex();
 
@@ -98,6 +106,8 @@ void Engine::drawInstance(Instance* inst)
 	ID3D11RenderTargetView* renderTargets[] = { mScreenTex->GetRTV() };
 	ID3D11DepthStencilView* depthStencil = { mDepthTex->GetDSV() };
 
+	ID3D11ShaderResourceView* shaderResources[] = { inst->GetResourceView() };
+
 	D3D11_VIEWPORT viewports[] = { mMainDisplay.GetViewport() };
 
 	context->OMSetRenderTargets(1, renderTargets, depthStencil);
@@ -105,7 +115,8 @@ void Engine::drawInstance(Instance* inst)
 	if (vertex != nullptr)
 	{
 		context->VSSetShader(vertex, nullptr, 0);
-		context->VSSetConstantBuffers(0, 2, buffers);
+		context->VSSetConstantBuffers(0, 1, buffers);
+		context->VSSetShaderResources(0, 1, shaderResources);
 	}
 
 	if (geometry != nullptr)

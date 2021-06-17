@@ -22,8 +22,6 @@ bool Compiler::Compile(const char* path, unsigned int passType, Shader* shader)
         result = D3DCompileFromFile(A2W(path), nullptr,
             D3D_COMPILE_STANDARD_FILE_INCLUDE, "vert", "vs_5_0", 0, compileFlag, &vertexBlob, &errorBlob);
         
-        Reflect(vertexBlob, shader);
-
         if (result != S_OK)
         {
             DebugLog("failed to compile vertex shader.");
@@ -31,6 +29,10 @@ bool Compiler::Compile(const char* path, unsigned int passType, Shader* shader)
             errorBlob->Release();
             return false;
         }
+
+        Reflect(vertexBlob, shader);
+
+
 
         result = device->CreateVertexShader(vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), nullptr, shader->mVertex.GetAddressOf());
         vertexBlob->Release();

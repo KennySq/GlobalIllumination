@@ -107,7 +107,8 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 
 			for (unsigned int i = 0; i < triCount; i++)
 			{
-				for (unsigned int j = 0; j < 3; j++)
+				unsigned int topology = mesh->GetPolygonSize(i);
+				for (unsigned int j = 0; j < topology; j++)
 				{
 					int cpi = mesh->GetPolygonVertex(i, j);
 
@@ -132,7 +133,7 @@ void Assets::AssetModel::fbxLoadNode(FbxNode* node)
 			ibufferDesc.ByteWidth = sizeof(unsigned int) * indices.size();
 			ibufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 			ibufferDesc.Usage = D3D11_USAGE_DEFAULT;
-
+			
 			subData.pSysMem = vertices.data();
 
 			result = device->CreateBuffer(&vbufferDesc, &subData, vbuffer.GetAddressOf());
@@ -195,7 +196,7 @@ XMFLOAT2 Assets::AssetModel::fbxGetUV(FbxMesh* mesh, unsigned int cpi, unsigned 
 
 	FbxGeometryElementUV* vertexUV = mesh->GetElementUV(0);
 
-	XMFLOAT2 texcoord;
+	XMFLOAT2 texcoord = { 0,0 };
 
 	switch (vertexUV->GetMappingMode())
 	{
@@ -235,17 +236,17 @@ XMFLOAT2 Assets::AssetModel::fbxGetUV(FbxMesh* mesh, unsigned int cpi, unsigned 
 void Assets::AssetModel::fbxAddVertex(StaticVertex vertex, map<StaticVertex, unsigned int>& indexMap, vector<StaticVertex>& vertices, vector<unsigned int>& indices)
 {
 	auto lookup = indexMap.find(vertex);
-	if (lookup != indexMap.end())
-	{
-		indices.emplace_back(lookup->second);
-	}
-	else
-	{
+	//if (lookup != indexMap.end())
+	//{
+	//	indices.emplace_back(lookup->second);
+	//}
+	//else
+	//{
 		unsigned int index = vertices.size();
 		indexMap[vertex] = index;
 		indices.emplace_back(index);
 		vertices.emplace_back(vertex);
-	}
+	//}
 
 	mIndexCount = indices.size();
 

@@ -4,26 +4,13 @@
 long long Instance::gInstanceID = 0;
 
 Instance::Instance(const char* name)
-	: mName(MemoryBank::Find(name)), mInstanceID(gInstanceID), mModel(nullptr), mShader(nullptr)
+	: mName(MemoryBank::Find(name)), mInstanceID(gInstanceID), mModel(nullptr), mShader(nullptr), mTransform(new Transform(mRaw))
 {
 	HRESULT result;
 	auto device = Hardware::GetDevice();
 
 	D3D11_BUFFER_DESC bufferDesc{};
 	D3D11_SUBRESOURCE_DATA subData{};
-
-	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(InstanceBuffer);
-	subData.pSysMem = &mRaw;
-
-
-	result = device->CreateBuffer(&bufferDesc, &subData, mBuffer.GetAddressOf());
-	if (result != S_OK)
-	{
-		DebugLog("failed to create instance buffer.");
-		return;
-	}
 
 	MemoryBank::AddInstance(this);
 	gInstanceID++;

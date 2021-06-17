@@ -7,7 +7,7 @@ cbuffer CAMERA : register(b0)
 	float4 gViewDirection;
 }
 
-cbuffer INSTANCE : register(b1)
+struct InstanceBuffer
 {
-	float4x4 gWorld;
-}
+    float4x4 mWorld;
+};

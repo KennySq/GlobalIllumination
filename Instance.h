@@ -1,5 +1,6 @@
 #pragma once
 #include"IRoutine.h"
+#include"Transform.h"
 #include"Asset.h"
 #include"Shader.h"
 
@@ -29,7 +30,9 @@ public:
 	bool BindModel(const char* model);
 	bool BindShader(const char* name);
 
-	ID3D11Buffer* GetBuffer() const { return mBuffer.Get(); }
+	ID3D11Buffer* GetBuffer() const { return mTransform->GetBuffer(); }
+	ID3D11ShaderResourceView* GetResourceView() const { return mTransform->GetView(); }
+
 	Shader* GetShader() const { return mShader; }
 	Assets::AssetModel* GetModel() const { return mModel; }
 
@@ -39,13 +42,11 @@ private:
 
 	Shader* mShader;
 	Assets::AssetModel* mModel;
-
-	ComPtr<ID3D11Buffer> mBuffer;
+	
+	Transform* mTransform;
 	InstanceBuffer mRaw;
 
 	long long mInstanceID;
 	const string& mName;
-
-
 };
 

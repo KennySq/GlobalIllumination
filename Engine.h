@@ -35,6 +35,8 @@ private:
     Assets::AssetModel* mAsset_Roman;
     Shader* mShader_Default;
 
+    Input* mInput;
+
     virtual void Init() override;
     virtual void Release() override;
 

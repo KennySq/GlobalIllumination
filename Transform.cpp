@@ -63,9 +63,15 @@ void Transform::Release()
 void Transform::Update(float delta)
 {
 	static auto context = Hardware::GetContext();
-
+	static HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE sub;
-	context->Map(mBuffer.Get(), D3D11CalcSubresource(0,0,1), D3D11_MAP::D3D11_MAP_WRITE_DISCARD, D3D11_MAP_FLAG_DO_NOT_WAIT, &sub);
+	result = context->Map(mBuffer.Get(), D3D11CalcSubresource(0,0,1), D3D11_MAP::D3D11_MAP_WRITE_DISCARD, D3D11_MAP_FLAG_DO_NOT_WAIT, &sub);
+
+	if (result != S_OK)
+	{
+		DebugLog("faield to map buffer.");
+		return;
+	}
 
 	XMFLOAT4X4* mat = reinterpret_cast<XMFLOAT4X4*>(sub.pData);
 
@@ -86,21 +92,33 @@ bool Transform::generate()
 
 	D3D11_BUFFER_DESC desc{};
 	D3D11_SUBRESOURCE_DATA subData{};
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 
 	desc.ByteWidth = sizeof(InstanceBuffer);
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	desc.Usage = D3D11_USAGE_DYNAMIC;
 	desc.StructureByteStride = sizeof(InstanceBuffer);
-
 	desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	subData.pSysMem = &mTransform;
 
+	srvDesc.Buffer.NumElements = 1;
+	srvDesc.Buffer.ElementWidth = sizeof(InstanceBuffer);
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+
 	result = device->CreateBuffer(&desc, &subData, mBuffer.GetAddressOf());
 	if (result != S_OK)
 	{
 		DebugLog("failed to generate a buffer.");
+		return false;
+	}
+
+
+	result = device->CreateShaderResourceView(mBuffer.Get(), &srvDesc, mView.GetAddressOf());
+	if (result != S_OK)
+	{
+		DebugLog("failed to create shader resource view.");
 		return false;
 	}
 

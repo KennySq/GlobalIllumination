@@ -27,7 +27,7 @@ void Engine::Init()
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
 
 	mAsset_Roman = new AssetModel("resources/roman/roman.fbx");
-	mAsset_Roman->Open();
+	//mAsset_Roman->Open();
 
 	AssetModel* handModel = new AssetModel("resources/hand/hand.fbx");
 	handModel->Open();
@@ -38,7 +38,7 @@ void Engine::Init()
 	mInput = new Input(width, height);
 
 	Instance* instance1 = new Instance("instance 1");
-	instance1->BindModel("resources/roman/roman.fbx");
+	instance1->BindModel("resources/hand/hand.fbx");
 	instance1->BindShader("resources/shaders/Default.hlsl");
 }
 

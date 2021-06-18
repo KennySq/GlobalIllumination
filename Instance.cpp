@@ -33,6 +33,7 @@ void Instance::Release()
 
 void Instance::Update(float delta)
 {
+	mTransform->Update(delta);
 }
 
 void Instance::Render(float delta)

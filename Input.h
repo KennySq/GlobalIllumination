@@ -8,13 +8,12 @@ public:
 
 	bool ReadKeyboard();
 	bool ReadMouse();
-
 	void ProcessInput();
 
 	unsigned int GetMouseX() const { return mMouseX; }
 	unsigned int GetMouseY() const { return mMouseY; }
 
-	bool GetKey(unsigned int keyCode) const { return mKeyState[keyCode] & 0x80; }
+	bool GetKey(unsigned char keyCode) const { return mKeyState[keyCode] & 0x80; }
 
 	virtual void Init() override;
 	virtual void Release() override;
@@ -22,17 +21,14 @@ public:
 	virtual void Render(float delta) override;
 
 private:
-
-
-
 	ComPtr<IDirectInput8> mDirectInput;
 	ComPtr<IDirectInputDevice8> mKeyboard;
 	ComPtr<IDirectInputDevice8> mMouse;
 
 	unsigned int mWidth, mHeight;
-	int mMouseX, mMouseY;
+	unsigned int mMouseX, mMouseY;
 
-	unsigned int mKeyState[256];
+	unsigned char mKeyState[256];
 	DIMOUSESTATE mMouseState;
 
 

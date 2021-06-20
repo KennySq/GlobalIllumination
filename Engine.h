@@ -27,7 +27,7 @@ private:
     Hardware* mHardware;
     Display mMainDisplay;
 
-    Buffer2D* mScreenTex;
+    SwapTex2D* mScreenTex;
     Tex2D* mDepthTex;
 
     Camera* mMainCamera;
@@ -36,6 +36,8 @@ private:
     Shader* mShader_Default;
 
     Input* mInput;
+
+    void PreInit();
 
     virtual void Init() override;
     virtual void Release() override;

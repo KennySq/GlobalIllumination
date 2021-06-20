@@ -282,17 +282,17 @@ XMFLOAT3 Assets::AssetModel::fbxGetNormal(FbxMesh* mesh, unsigned int cpi, unsig
 				{
 					case FbxGeometryElement::eDirect:
 					{
-						normal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[0]);
-						normal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[1]);
-						normal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[2]);
+						normal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCount).mData[0]);
+						normal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCount).mData[1]);
+						normal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(vertexCount).mData[2]);
 					}
 					break;
 
 					case FbxGeometryElement::eIndexToDirect:
 						int index = vertexNormal->GetIndexArray().GetAt(vertexCount);
-						normal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[0]);
-						normal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[1]);
-						normal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(cpi).mData[2]);
+						normal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[0]);
+						normal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
+						normal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
 						break;
 				}
 			}

@@ -16,14 +16,14 @@ Engine::~Engine()
 	Release();
 }
 
-void Engine::Init()
+void Engine::PreInit()
 {
 	MemoryBank* memory = MemoryBank::GetInstance();
 
 	unsigned int width = mMainDisplay.GetWidth();
 	unsigned int height = mMainDisplay.GetHeight();
 
-	mScreenTex = new Buffer2D(width, height);
+	mScreenTex = new SwapTex2D(width, height);
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
 
 	mAsset_Roman = new AssetModel("resources/roman/roman.fbx");
@@ -32,10 +32,16 @@ void Engine::Init()
 	AssetModel* handModel = new AssetModel("resources/hand/hand.fbx");
 	handModel->Open();
 
-	mMainCamera = new Camera({ -200,-200,-200 }, { 1,0,0 }, XMConvertToRadians(90.0f), mMainDisplay.GetAspectRatio());
+	mMainCamera = new Camera({ 200,-350,0 }, { -1,0,0 }, XMConvertToRadians(90.0f), mMainDisplay.GetAspectRatio());
 	mShader_Default = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
 
 	mInput = new Input(width, height);
+	GUI* gui = GUI::GetInstance(width, height);
+}
+
+void Engine::Init()
+{
+	PreInit();
 
 	Instance* instance1 = new Instance("instance 1");
 	instance1->BindModel("resources/hand/hand.fbx");
@@ -47,28 +53,59 @@ void Engine::Update(float delta)
 	static auto context = Hardware::GetContext();
 	static MemoryBank* memory = MemoryBank::GetInstance();
 	static Instance* inst1 = MemoryBank::FindInstance(0);
+	static GUI* gui = GUI::GetInstance();
 
 	context->ClearRenderTargetView(mScreenTex->GetRTV(), DirectX::Colors::Green);
 	context->ClearDepthStencilView(mDepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0, 0);
 
 	mMainCamera->Update(delta);
 	mInput->Update(delta);
+	inst1->Update(delta);
+	Transform::Rotate(inst1->GetRawTransform(), 0.0, 0.01 * delta, 0.0);
 
-	if (mInput->GetKey('W'))
+	static XMFLOAT4X4& viewMatrix = mMainCamera->GetRawTransform();
+	
+	if (mInput->GetKey(DIK_W))
 	{
-
+		Transform::Translate(viewMatrix, 0, 0, -10 * delta);
 	}
 
+	if (mInput->GetKey(DIK_S))
+	{
+		Transform::Translate(viewMatrix, 0, 0, 10 * delta);
+	}
+
+	if (mInput->GetKey(DIK_A))
+	{
+		Transform::Translate(viewMatrix, 10 * delta, 0, 0);
+	}
+
+	if (mInput->GetKey(DIK_D))
+	{
+		Transform::Translate(viewMatrix, -10 * delta,0, 0);
+	}
+
+	if (mInput->GetKey(DIK_E))
+	{
+		Transform::Translate(viewMatrix,0, 10 * delta, 0);
+	}
+
+	if (mInput->GetKey(DIK_Q))
+	{
+		Transform::Translate(viewMatrix, 0, -10 * delta, 0);
+	}
+	gui->Slider(viewMatrix);
 	drawInstance(inst1);
 }
 
 void Engine::Render(float delta)
 {
 	static auto swapChain = Hardware::GetSwapChain();
-	
-	mMainCamera->Render(delta);
+	static GUI* gui = GUI::GetInstance();
 
+	mMainCamera->Render(delta);
 	
+	gui->Draw();
 
 	swapChain->Present(0, 0);
 }

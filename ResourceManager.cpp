@@ -86,17 +86,17 @@ void Resources::Tex2D::Release()
 	mTex.ReleaseAndGetAddressOf();
 }
 
-Resources::Buffer2D::Buffer2D(unsigned int width, unsigned height) : mWidth(width), mHeight(height)
+Resources::SwapTex2D::SwapTex2D(unsigned int width, unsigned height) : mWidth(width), mHeight(height)
 {
 	Generate();
 }
 
-Resources::Buffer2D::~Buffer2D()
+Resources::SwapTex2D::~SwapTex2D()
 {
 	Release();
 }
 
-void Resources::Buffer2D::Generate()
+void Resources::SwapTex2D::Generate()
 {
 	HRESULT result;
 	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
@@ -115,7 +115,7 @@ void Resources::Buffer2D::Generate()
 
 }
 
-void Resources::Buffer2D::Release()
+void Resources::SwapTex2D::Release()
 {
 	mTex.ReleaseAndGetAddressOf();
 	mRenderTarget.ReleaseAndGetAddressOf();

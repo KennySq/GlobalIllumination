@@ -24,13 +24,17 @@ public:
 	virtual void Update(float delta) override;
 	virtual void Render(float delta) override;
 
-	ID3D11Buffer* GetBuffer() const { return mBuffer.Get(); }
+	ID3D11Buffer* GetBuffer() const { return mBuffer->GetBuffer(); }
+	
+	// Read and write.
+	XMFLOAT4X4& GetRawTransform() { return mRaw.mView; }
 
+
+	friend class Transform;
 private:
-	ComPtr<ID3D11Buffer> mBuffer;
+	ConstantBuffer<CameraBuffer>* mBuffer;
 	CameraBuffer mRaw;
 
 	float mFieldofView;
 	float mAspectRatio;
-
 };

@@ -2,6 +2,8 @@
 
 StructuredBuffer<InstanceBuffer> gInstance : register(t0);
 
+static float4 gDirectionalLight1 = float4(50, 50, 50, 1.0);
+
 struct StaticVertex
 {
 	float4 mPosition : POSITION0;
@@ -32,5 +34,9 @@ PixelInput vert(StaticVertex vertex)
 
 float4 pix(PixelInput input) : SV_Target0
 {
-    return normalize(input.mPosition);
+    float4 normal = normalize(input.mNormal);
+	
+    float4 lightDir = normalize(input.mPosition - gDirectionalLight1);
+    return saturate(dot(normal, lightDir));
+
 }

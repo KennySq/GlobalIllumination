@@ -49,9 +49,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg = MSG();
     engine = new Engine(hWnd, hInst, WIDTH, HEIGHT);
 
-    // 기본 메시지 루프입니다:
+
+    double t = 0.0;
+    double currentTime = clock();
+    double acc = 0.0;
+    const double dt = 0.01;
+
     while (msg.message != WM_QUIT)
     {
+        double newTime = clock();
+        double frameTime = newTime - currentTime;
+        currentTime = newTime;
+
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
             if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -62,8 +71,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
         else
         {
-            engine->Update(.0);
-            engine->Render(.0);
+            while (frameTime > 0.0)
+            {
+                float delta = min(frameTime, dt);
+                engine->Update(delta);
+                frameTime -= delta;
+                t += frameTime;
+
+                engine->Render(delta);
+            }
+
         }
 
 

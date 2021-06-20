@@ -17,22 +17,7 @@ Camera::Camera(XMFLOAT3 pos, XMFLOAT3 dir, float fov, float aspectRatio)
 	XMStoreFloat4x4(&mRaw.mView, XMMatrixTranspose(XMMatrixLookToLH(position, direction, XMVectorSet(0, 1, 0, 0))));
 	XMStoreFloat4x4(&mRaw.mProjection, XMMatrixTranspose( XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.01, 1000.0)));
 
-	//XMStoreFloat4x4(&mRaw.mView, XMMatrixLookToLH(position, direction, XMVectorSet(0, 1, 0, 0)));
-	//XMStoreFloat4x4(&mRaw.mProjection, XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.01, 1000.0));
-
-
-	D3D11_BUFFER_DESC bufferDesc{};
-	D3D11_SUBRESOURCE_DATA subData{};
-
-	bufferDesc.ByteWidth = sizeof(CameraBuffer);
-	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-
-	subData.pSysMem = &mRaw;
-
-	result = device->CreateBuffer(&bufferDesc, &subData, mBuffer.GetAddressOf());
-	assert(result == S_OK && "failed to create generate camera buffer.");
-
+	mBuffer = new ConstantBuffer<CameraBuffer>(&mRaw);
 }
 
 Camera::~Camera()
@@ -45,7 +30,7 @@ void Camera::Init()
 
 void Camera::Release()
 {
-	mBuffer.ReleaseAndGetAddressOf();
+	delete mBuffer;
 }
 
 void Camera::Update(float delta)
@@ -55,8 +40,7 @@ void Camera::Update(float delta)
 	XMMATRIX inverse = XMMatrixInverse(&deter, XMLoadFloat4x4(&mRaw.mView));
 
 	mRaw.mPosition = XMFLOAT4(inverse.r[3].m128_f32[0], inverse.r[3].m128_f32[1], inverse.r[3].m128_f32[2], 1.0f);
-
-	context->UpdateSubresource(mBuffer.Get(), 0, nullptr, &mRaw, 0, 0);
+	mBuffer->Write();
 }
 
 void Camera::Render(float delta)

@@ -16,7 +16,7 @@ bool Input::ReadKeyboard()
 {
 	HRESULT result;
 
-	result = mKeyboard->GetDeviceState(sizeof(mKeyState), reinterpret_cast<void*>(mKeyState));
+	result = mKeyboard->GetDeviceState(sizeof(mKeyState), reinterpret_cast<void*>(&mKeyState));
 	if (result != S_OK)
 	{
 		if ((result == DIERR_INPUTLOST) || (result == DIERR_NOTACQUIRED))
@@ -40,7 +40,7 @@ bool Input::ReadMouse()
 	result = mMouse->GetDeviceState(sizeof(DIMOUSESTATE), reinterpret_cast<void*>(&mMouseState));
 	if (result != S_OK)
 	{
-		DebugLog("failed to get device state");
+		DebugLog("failed to get mouse state");
 
 		if ((result == DIERR_INPUTLOST) || (result == DIERR_NOTACQUIRED))
 		{
@@ -51,7 +51,6 @@ bool Input::ReadMouse()
 			return false;
 		}
 	}
-
 
 	return true;
 }
@@ -165,6 +164,20 @@ void Input::Release()
 
 void Input::Update(float delta)
 {
+
+	bool result = ReadMouse();
+	if (result == false)
+	{
+	//	DebugLog("mouse control has been lost.");
+	}
+
+
+	result = ReadKeyboard();
+	if (result == false)
+	{
+	//	DebugLog("keyboard control has been lost.");
+	}
+
 	ProcessInput();
 
 

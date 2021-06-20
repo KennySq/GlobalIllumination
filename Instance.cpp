@@ -4,7 +4,7 @@
 long long Instance::gInstanceID = 0;
 
 Instance::Instance(const char* name)
-	: mName(MemoryBank::Find(name)), mInstanceID(gInstanceID), mModel(nullptr), mShader(nullptr), mTransform(new Transform(mRaw))
+	: mName(MemoryBank::Find(name)), mInstanceID(gInstanceID), mModel(nullptr), mShader(nullptr)
 {
 	HRESULT result;
 	auto device = Hardware::GetDevice();
@@ -13,7 +13,11 @@ Instance::Instance(const char* name)
 	D3D11_SUBRESOURCE_DATA subData{};
 
 	MemoryBank::AddInstance(this);
+
+	mInstanceBuffer = new RWStructuredBuffer<InstanceBuffer>(&mRaw, 1);
+
 	gInstanceID++;
+
 
 }
 
@@ -33,7 +37,7 @@ void Instance::Release()
 
 void Instance::Update(float delta)
 {
-	mTransform->Update(delta);
+	mInstanceBuffer->Write();
 }
 
 void Instance::Render(float delta)

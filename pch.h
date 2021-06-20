@@ -30,6 +30,10 @@
 #include<DirectXColors.h>
 #include<dinput.h>
 
+#include"include/imgui/imgui_impl_dx11.h"
+#include"include/imgui/imgui.h"
+#include"include/imgui/imgui_impl_win32.h"
+
 #include<wrl.h>
 #include<atlbase.h>
 
@@ -39,11 +43,14 @@
 #include<unordered_map>
 #include<map>
 
+#include"Utility.h"
 #include"Hardware.h"
 
 #include"MemoryBank.h"
-#include"Utility.h"
+
 #include "Compiler.h"
 #include"Input.h"
+
+#include"GUI.h"
 
 #endif //PCH_H

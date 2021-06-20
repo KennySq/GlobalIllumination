@@ -3,15 +3,18 @@
 #include"Transform.h"
 #include"Asset.h"
 #include"Shader.h"
+#include"ResourceManager.h"
+
+using namespace Resources;
 
 struct InstanceBuffer
 {
-	XMFLOAT4X4 mWorld;
-
 	InstanceBuffer()
 	{
 		XMStoreFloat4x4(&mWorld, XMMatrixIdentity());
 	}
+
+	XMFLOAT4X4 mWorld;
 };
 
 class Instance : public IRoutine
@@ -30,11 +33,13 @@ public:
 	bool BindModel(const char* model);
 	bool BindShader(const char* name);
 
-	ID3D11Buffer* GetBuffer() const { return mTransform->GetBuffer(); }
-	ID3D11ShaderResourceView* GetResourceView() const { return mTransform->GetView(); }
+	ID3D11Buffer* GetBuffer() const { return mInstanceBuffer->GetBuffer(); }
+	ID3D11ShaderResourceView* GetResourceView() const { return mInstanceBuffer->GetView(); }
 
 	Shader* GetShader() const { return mShader; }
 	Assets::AssetModel* GetModel() const { return mModel; }
+
+	XMFLOAT4X4& GetRawTransform() { return mRaw.mWorld; }
 
 private:
 
@@ -42,11 +47,14 @@ private:
 
 	Shader* mShader;
 	Assets::AssetModel* mModel;
-	
-	Transform* mTransform;
+
 	InstanceBuffer mRaw;
 
 	long long mInstanceID;
 	const string& mName;
+
+	RWStructuredBuffer<InstanceBuffer>* mInstanceBuffer;
+	
+
 };
 

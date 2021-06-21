@@ -40,7 +40,7 @@ public:
 	static GUI* GetInstance(unsigned int width = 0, unsigned int height = 0);
 
 	void Draw();
-
+	void AboutInstance(Instance* inst, float min, float max);
 
 private:
 	GUI(unsigned int width, unsigned int height);

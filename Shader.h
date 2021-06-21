@@ -21,7 +21,6 @@ public:
 
 private:
 	Shader(const Shader& rhs) = delete;
-
 	friend class Compiler;
 
 	ComPtr<ID3D11VertexShader> mVertex;

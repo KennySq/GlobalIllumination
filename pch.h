@@ -16,6 +16,7 @@
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "uuid.lib")
+#pragma comment(lib, "d3d10.lib")
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
@@ -23,14 +24,17 @@
 #include<fbxsdk.h>
 
 #include<d3d11.h>
+#include<d3d10.h>
 #include<dxgi.h>
 #include<d3dcompiler.h>
 #include<d3d11shader.h>
+#include<d3d10shader.h>
 #include<DirectXMath.h>
 #include<DirectXColors.h>
 #include<dinput.h>
 
 #include"include/imgui/imgui_impl_dx11.h"
+//#include"include/imgui/"
 #include"include/imgui/imgui.h"
 #include"include/imgui/imgui_impl_win32.h"
 

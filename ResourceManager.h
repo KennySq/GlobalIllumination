@@ -188,6 +188,13 @@ namespace Resources
 	inline void RWStructuredBuffer<_Ty>::Write()
 	{
 		static auto context = Hardware::GetContext();
+
+		if (mBuffer == nullptr)
+		{
+			DebugLog("buffer was invalid, check RWStructuredBuffer constructor.");
+			return;
+		}
+
 		context->UpdateSubresource(mBuffer.Get(), 0, nullptr, reinterpret_cast<void*>(mData), 0, 0);
 	}
 

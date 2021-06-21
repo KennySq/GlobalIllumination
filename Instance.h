@@ -40,7 +40,7 @@ public:
 	Assets::AssetModel* GetModel() const { return mModel; }
 
 	XMFLOAT4X4& GetRawTransform() { return mRaw.mWorld; }
-
+	const char* GetName() const { return mName.c_str(); }
 private:
 
 	static long long gInstanceID;
@@ -49,7 +49,7 @@ private:
 	Assets::AssetModel* mModel;
 
 	InstanceBuffer mRaw;
-
+	
 	long long mInstanceID;
 	const string& mName;
 

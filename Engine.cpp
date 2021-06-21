@@ -34,7 +34,7 @@ void Engine::PreInit()
 
 	mMainCamera = new Camera({ 200,-350,0 }, { -1,0,0 }, XMConvertToRadians(90.0f), mMainDisplay.GetAspectRatio());
 	mShader_Default = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
-
+	
 	mInput = new Input(width, height);
 	GUI* gui = GUI::GetInstance(width, height);
 }
@@ -94,7 +94,7 @@ void Engine::Update(float delta)
 	{
 		Transform::Translate(viewMatrix, 0, -10 * delta, 0);
 	}
-	gui->Slider(viewMatrix);
+	gui->AboutInstance(inst1, -10.0, 10.0);
 	drawInstance(inst1);
 }
 
@@ -146,6 +146,24 @@ void Engine::drawInstance(Instance* inst)
 	ID3D11ShaderResourceView* shaderResources[] = { inst->GetResourceView() };
 
 	D3D11_VIEWPORT viewports[] = { mMainDisplay.GetViewport() };
+
+	if (vertexBuffers == nullptr || indexBuffers == nullptr)
+	{
+		DebugLog("One or more IA resource hasn't been bound.");
+		return;
+	}
+
+	if (vertex == nullptr && pixel == nullptr && geometry == nullptr && domain == nullptr && hull == nullptr && pixel == nullptr && compute == nullptr)
+	{
+		DebugLog("No shader has been bound.");
+		return;
+	}
+	
+	if (renderTargets == nullptr || depthStencil == nullptr)
+	{
+		DebugLog("Render Target View or Depth Stencil was invalid or not bound.");
+		return;
+	}
 
 	context->OMSetRenderTargets(1, renderTargets, depthStencil);
 

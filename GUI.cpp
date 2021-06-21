@@ -9,8 +9,6 @@ GUI::~GUI()
 
 void GUIEntity::Slider(XMFLOAT4X4& matrix, float min, float max, const char* label)
 {
-    CheckFrame();
-
     ImGui::SliderFloat4(label, matrix.m[0], min, max);
     ImGui::SliderFloat4(label, matrix.m[1], min, max);
     ImGui::SliderFloat4(label, matrix.m[2], min, max);
@@ -35,14 +33,26 @@ void GUI::Draw()
 
 }
 
-GUIFrame* GUIEntity::CheckFrame()
+void GUI::AboutInstance(Instance* inst, float min, float max)
 {
-    if (mFrame == nullptr)
-    {
-        mFrame = new GUIFrame();
-    }
+    ImGui::Begin(inst->GetName());
+    ImGui::NewFrame();
 
-    mFrame->Open();
+    AssetModel* model = inst->GetModel();
+    const char* modelPath = model->GetPath();
+
+    Shader* shader = inst->GetShader();
+    const char* shaderPath = shader->GetPath();
+
+    XMFLOAT4X4& transform = inst->GetRawTransform();
+    float position[3] = { transform._14, transform._24, transform._34 };
+
+    ImGui::Text("%s", modelPath);
+    ImGui::Text("%s", shaderPath);
+    ImGui::NewLine();
+    ImGui::SliderFloat4("Position", position, min, max);
+
+    ImGui::EndFrame();
 }
 
 GUI::GUI(unsigned int width, unsigned int height) : mWidth(width), mHeight(height)

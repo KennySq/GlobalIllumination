@@ -28,6 +28,7 @@ public:
 
 private:
 	GUIFrame* mFrame;
+
 };
 
 
@@ -37,13 +38,13 @@ public:
 
 	~GUI();
 
-	static GUI* GetInstance(unsigned int width = 0, unsigned int height = 0);
+	static GUI* GetInstance(Display* display = nullptr, unsigned int width = 0, unsigned int height = 0);
 
 	void Draw();
 	void AboutInstance(Instance* inst, float min, float max);
 
 private:
-	GUI(unsigned int width, unsigned int height);
+	GUI(Display* display, unsigned int width, unsigned int height);
 
 	unsigned int mWidth;
 	unsigned int mHeight;
@@ -53,5 +54,8 @@ private:
 	static GUI* mInstance;
 	vector<GUIFrame*> mFrames;
 	bool mbOpen;
+
+	ID3D11RenderTargetView* mRenderTarget;
+	ID3D11DepthStencilView* mDepthStencil;
 };
 

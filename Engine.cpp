@@ -26,6 +26,9 @@ void Engine::PreInit()
 	mScreenTex = new SwapTex2D(width, height);
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
 
+	mMainDisplay.BindRenderTarget(mScreenTex->GetRTV());
+	mMainDisplay.BindDepthStencil(mDepthTex->GetDSV());
+
 	mAsset_Roman = new AssetModel("resources/roman/roman.fbx");
 	//mAsset_Roman->Open();
 
@@ -36,7 +39,8 @@ void Engine::PreInit()
 	mShader_Default = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
 	
 	mInput = new Input(width, height);
-	GUI* gui = GUI::GetInstance(width, height);
+	GUI* gui = GUI::GetInstance(&mMainDisplay, width, height);
+
 }
 
 void Engine::Init()
@@ -94,8 +98,13 @@ void Engine::Update(float delta)
 	{
 		Transform::Translate(viewMatrix, 0, -10 * delta, 0);
 	}
-	gui->AboutInstance(inst1, -10.0, 10.0);
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+
 	drawInstance(inst1);
+	gui->AboutInstance(inst1, -10.0, 10.0);
+
 }
 
 void Engine::Render(float delta)
@@ -104,7 +113,6 @@ void Engine::Render(float delta)
 	static GUI* gui = GUI::GetInstance();
 
 	mMainCamera->Render(delta);
-	
 	gui->Draw();
 
 	swapChain->Present(0, 0);

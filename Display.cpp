@@ -29,13 +29,26 @@ Display::Display(float u, float v, unsigned int width, unsigned int height)
 
 }
 
-void Display::Bind(const ID3D11RenderTargetView* rtv)
+void Display::BindRenderTarget(ID3D11RenderTargetView* rtv)
 {
 	if (rtv == nullptr)
 	{
+		DebugLog("render target view was invalid.");
 		return;
 	}
 
 	mRenderTarget = rtv;
 
+}
+
+void Display::BindDepthStencil(ID3D11DepthStencilView* dsv)
+{
+	if (dsv == nullptr)
+	{
+		DebugLog("depth stencil view was invalid.");
+
+		return;
+	}
+
+	mDepthStencil = dsv;
 }

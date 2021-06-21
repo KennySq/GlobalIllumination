@@ -168,14 +168,14 @@ void Input::Update(float delta)
 	bool result = ReadMouse();
 	if (result == false)
 	{
-	//	DebugLog("mouse control has been lost.");
+		DebugLog("mouse control has been lost.");
 	}
 
 
 	result = ReadKeyboard();
 	if (result == false)
 	{
-	//	DebugLog("keyboard control has been lost.");
+		DebugLog("keyboard control has been lost.");
 	}
 
 	ProcessInput();

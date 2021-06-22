@@ -99,6 +99,26 @@ void Engine::Update(float delta)
 		Transform::Translate(viewMatrix, 0, -10 * delta, 0);
 	}
 
+	if (mInput->GetKey(DIK_UPARROW))
+	{
+		Transform::Rotate(viewMatrix, .1 * delta, 0, 0);
+	}
+
+	if (mInput->GetKey(DIK_DOWNARROW))
+	{
+		Transform::Rotate(viewMatrix, -.1 * delta, 0, 0);
+	}
+
+	if (mInput->GetKey(DIK_LEFTARROW))
+	{
+		Transform::Rotate(viewMatrix, 0, .1 * delta, 0);
+	}
+
+	if (mInput->GetKey(DIK_RIGHTARROW))
+	{
+		Transform::Rotate(viewMatrix, 0, -.1 * delta, 0);
+	}
+
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 

@@ -7,7 +7,8 @@ class Hardware
 {
 public:
 	
-	static Hardware* GetInstance(unsigned int width = 0, unsigned int height = 0, HWND handle = nullptr, HINSTANCE handleInst = nullptr) { 
+	static Hardware* GetInstance(unsigned int width = 0, unsigned int height = 0, HWND handle = nullptr, HINSTANCE handleInst = nullptr)
+	{ 
 		
 		if (mInstance == nullptr)
 		{
@@ -18,8 +19,6 @@ public:
 	}
 
 	static inline ID3D11Device* GetDevice() { return GetInstance()->mDevice.Get(); }
-
-
 	static inline ID3D11DeviceContext* GetContext() { return GetInstance()->mContext.Get(); }
 	
 	static inline IDXGISwapChain* GetSwapChain() { return GetInstance()->mSwapChain.Get(); }

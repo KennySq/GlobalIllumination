@@ -57,10 +57,9 @@ void GUI::AboutInstance(Instance* inst, float min, float max)
     ImGui::Text("%s", modelPath);
     ImGui::Text("%s", shaderPath);
     ImGui::NewLine();
-    ImGui::SliderFloat4("Position", position, min, max);
+    ImGui::SliderFloat3("Position", position, min, max);
     ImGui::End();
     ImGui::EndFrame();
-
 }
 
 GUI::GUI(Display* display, unsigned int width, unsigned int height) : mWidth(width), mHeight(height)

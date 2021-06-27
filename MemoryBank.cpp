@@ -99,6 +99,44 @@ Shader* MemoryBank::FindShader(const char* name)
     return memory->mShaders[memory->make_hash(name)];
 }
 
+void MemoryBank::AddLight(DirectionalLight* light)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+
+    if (light == nullptr)
+    {
+        DebugLog("failed to add directional light, invalid pointer.");
+        return;
+    }
+
+    memory->mDirectionalLights.emplace_back(light);
+}
+
+DirectionalLight* MemoryBank::FindDirectionalLight(long long lightID)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+    return memory->mDirectionalLights[lightID];
+}
+
+void MemoryBank::AddLight(PointLight* light)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+
+    if (light == nullptr)
+    {
+        DebugLog("failed to add point light, invalid pointer.");
+        return;
+    }
+
+    memory->mPointLights.emplace_back(light);
+}
+
+PointLight* MemoryBank::FindPointLight(long long lightID)
+{
+    static MemoryBank* memory = MemoryBank::GetInstance();
+    return memory->mPointLights[lightID];
+}
+
 long long MemoryBank::make_hash(string value)
 {
     const int p = 53;

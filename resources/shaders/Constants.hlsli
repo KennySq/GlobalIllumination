@@ -11,3 +11,10 @@ struct InstanceBuffer
 {
     float4x4 mWorld;
 };
+
+struct DirectionalLightBuffer
+{
+    float4x4 mTransform;
+    float3 mDirection;
+    float mIntensity;
+};

@@ -25,6 +25,7 @@ void Engine::PreInit()
 
 	mScreenTex = new SwapTex2D(width, height);
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
+	
 
 	mMainDisplay.BindRenderTarget(mScreenTex->GetRTV());
 	mMainDisplay.BindDepthStencil(mDepthTex->GetDSV());
@@ -36,7 +37,7 @@ void Engine::PreInit()
 	handModel->Open();
 
 	mMainCamera = new Camera({ 200,-350,0 }, { -1,0,0 }, XMConvertToRadians(90.0f), mMainDisplay.GetAspectRatio());
-	mShader_Default = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
+	mShaderDefault = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
 	
 	mInput = new Input(width, height);
 	GUI* gui = GUI::GetInstance(&mMainDisplay, width, height);
@@ -50,6 +51,9 @@ void Engine::Init()
 	Instance* instance1 = new Instance("instance 1");
 	instance1->BindModel("resources/hand/hand.fbx");
 	instance1->BindShader("resources/shaders/Default.hlsl");
+
+	new DirectionalLight(XMVectorSet(0, -1, 0, 0), 1);
+
 }
 
 void Engine::Update(float delta)
@@ -57,6 +61,7 @@ void Engine::Update(float delta)
 	static auto context = Hardware::GetContext();
 	static MemoryBank* memory = MemoryBank::GetInstance();
 	static Instance* inst1 = MemoryBank::FindInstance(0);
+	static DirectionalLight* dirLight1 = MemoryBank::FindDirectionalLight(0);
 	static GUI* gui = GUI::GetInstance();
 
 	context->ClearRenderTargetView(mScreenTex->GetRTV(), DirectX::Colors::Green);
@@ -65,6 +70,10 @@ void Engine::Update(float delta)
 	mMainCamera->Update(delta);
 	mInput->Update(delta);
 	inst1->Update(delta);
+	dirLight1->Update(delta);
+
+	Transform::Rotate(dirLight1->GetRawTransform(), 0.01 * delta, 0, 0);
+
 	Transform::Rotate(inst1->GetRawTransform(), 0.0, 0.01 * delta, 0.0);
 
 	static XMFLOAT4X4& viewMatrix = mMainCamera->GetRawTransform();

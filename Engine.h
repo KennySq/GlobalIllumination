@@ -33,7 +33,7 @@ private:
     Camera* mMainCamera;
 
     Assets::AssetModel* mAsset_Roman;
-    Shader* mShader_Default;
+    Shader* mShaderDefault;
 
     Input* mInput;
 

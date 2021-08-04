@@ -1,6 +1,7 @@
 #include"Constants.hlsli"
 
 StructuredBuffer<InstanceBuffer> gInstance : register(t0);
+StructuredBuffer<DirectionalLightBuffer> gDirectionalLights : register(t1);
 
 static float4 gDirectionalLight1 = float4(50, 50, 50, 1.0);
 

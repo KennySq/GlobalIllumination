@@ -25,6 +25,10 @@ void Engine::PreInit()
 
 	mScreenTex = new SwapTex2D(width, height);
 	mDepthTex = new Tex2D(width, height, TEX_TYPE::eDepth, DXGI_FORMAT_R24G8_TYPELESS);
+	
+
+	mMainDisplay.BindRenderTarget(mScreenTex->GetRTV());
+	mMainDisplay.BindDepthStencil(mDepthTex->GetDSV());
 
 	mAsset_Roman = new AssetModel("resources/roman/roman.fbx");
 	//mAsset_Roman->Open();
@@ -33,10 +37,11 @@ void Engine::PreInit()
 	handModel->Open();
 
 	mMainCamera = new Camera({ 200,-350,0 }, { -1,0,0 }, XMConvertToRadians(90.0f), mMainDisplay.GetAspectRatio());
-	mShader_Default = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
+	mShaderDefault = new Shader("resources/shaders/Default.hlsl", (eVertex | ePixel));
 	
 	mInput = new Input(width, height);
-	GUI* gui = GUI::GetInstance(width, height);
+	GUI* gui = GUI::GetInstance(&mMainDisplay, width, height);
+
 }
 
 void Engine::Init()
@@ -46,6 +51,9 @@ void Engine::Init()
 	Instance* instance1 = new Instance("instance 1");
 	instance1->BindModel("resources/hand/hand.fbx");
 	instance1->BindShader("resources/shaders/Default.hlsl");
+
+	new DirectionalLight(XMVectorSet(0, -1, 0, 0), 1);
+
 }
 
 void Engine::Update(float delta)
@@ -53,6 +61,7 @@ void Engine::Update(float delta)
 	static auto context = Hardware::GetContext();
 	static MemoryBank* memory = MemoryBank::GetInstance();
 	static Instance* inst1 = MemoryBank::FindInstance(0);
+	static DirectionalLight* dirLight1 = MemoryBank::FindDirectionalLight(0);
 	static GUI* gui = GUI::GetInstance();
 
 	context->ClearRenderTargetView(mScreenTex->GetRTV(), DirectX::Colors::Green);
@@ -61,6 +70,10 @@ void Engine::Update(float delta)
 	mMainCamera->Update(delta);
 	mInput->Update(delta);
 	inst1->Update(delta);
+	dirLight1->Update(delta);
+
+	Transform::Rotate(dirLight1->GetRawTransform(), 0.01 * delta, 0, 0);
+
 	Transform::Rotate(inst1->GetRawTransform(), 0.0, 0.01 * delta, 0.0);
 
 	static XMFLOAT4X4& viewMatrix = mMainCamera->GetRawTransform();
@@ -94,8 +107,33 @@ void Engine::Update(float delta)
 	{
 		Transform::Translate(viewMatrix, 0, -10 * delta, 0);
 	}
-	gui->AboutInstance(inst1, -10.0, 10.0);
+
+	if (mInput->GetKey(DIK_UPARROW))
+	{
+		Transform::Rotate(viewMatrix, .1 * delta, 0, 0);
+	}
+
+	if (mInput->GetKey(DIK_DOWNARROW))
+	{
+		Transform::Rotate(viewMatrix, -.1 * delta, 0, 0);
+	}
+
+	if (mInput->GetKey(DIK_LEFTARROW))
+	{
+		Transform::Rotate(viewMatrix, 0, .1 * delta, 0);
+	}
+
+	if (mInput->GetKey(DIK_RIGHTARROW))
+	{
+		Transform::Rotate(viewMatrix, 0, -.1 * delta, 0);
+	}
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+
 	drawInstance(inst1);
+	gui->AboutInstance(inst1, -10.0, 10.0);
+
 }
 
 void Engine::Render(float delta)
@@ -104,7 +142,6 @@ void Engine::Render(float delta)
 	static GUI* gui = GUI::GetInstance();
 
 	mMainCamera->Render(delta);
-	
 	gui->Draw();
 
 	swapChain->Present(0, 0);

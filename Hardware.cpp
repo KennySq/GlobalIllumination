@@ -27,7 +27,7 @@ Hardware::Hardware(unsigned int width, unsigned int height, HWND handle, HINSTAN
 	scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
 	result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG,
-		levels, levelCount, D3D11_SDK_VERSION, &scDesc, mSwapChain.GetAddressOf(), mDevice11.GetAddressOf(), &selectedLevel, mContext.GetAddressOf());
+		levels, levelCount, D3D11_SDK_VERSION, &scDesc, mSwapChain.GetAddressOf(), mDevice.GetAddressOf(), &selectedLevel, mContext.GetAddressOf());
 	
 	assert(result == S_OK && "failed to create device 11");
 	if (result != S_OK)
@@ -38,22 +38,5 @@ Hardware::Hardware(unsigned int width, unsigned int height, HWND handle, HINSTAN
 	
 	DebugLog("you're currently on");
 	DebugLog(selectedLevel);
-
-	D3D11_FEATURE_DATA_D3D10_X_HARDWARE_OPTIONS featureData;
-	D3D11_FEATURE_DATA_ARCHITECTURE_INFO architextureData;
-
-	result = mDevice11->CheckFeatureSupport(D3D11_FEATURE::D3D11_FEATURE_D3D10_X_HARDWARE_OPTIONS, reinterpret_cast<void*>(&featureData), sizeof(D3D11_FEATURE_D3D10_X_HARDWARE_OPTIONS));
-	DebugLog(reinterpret_cast<char*>(&featureData));
-	DebugLog(featureData.ComputeShaders_Plus_RawAndStructuredBuffers_Via_Shader_4_x);
-	
-	result = D3D10CreateDeviceAndSwapChain(nullptr, D3D10_DRIVER_TYPE_HARDWARE, nullptr, D3D10_CREATE_DEVICE_DEBUG,
-		D3D10_SDK_VERSION, &scDesc, mSwapChain.GetAddressOf(), mDevice10.GetAddressOf());
-	assert(result == S_OK);
-
-	if (result != S_OK)
-	{
-		MessageBoxA(nullptr, "failed to create device 10", 0, 0);
-		exit(-1);
-	}
 
 }

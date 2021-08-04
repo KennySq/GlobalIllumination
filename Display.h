@@ -15,9 +15,11 @@ public:
 	float GetV() const { return mV; }
 	float GetAspectRatio() const { return mAspectRatio; }
 
-	void Bind(const ID3D11RenderTargetView* rtv);
-	const ID3D11RenderTargetView* GetResource() const { return mRenderTarget; }
+	void BindRenderTarget(ID3D11RenderTargetView* rtv);
+	void BindDepthStencil(ID3D11DepthStencilView* dsv);
 
+	ID3D11RenderTargetView* GetRenderTarget() const { return mRenderTarget; }
+	ID3D11DepthStencilView* GetDepthStencil() const { return mDepthStencil; }
 	const D3D11_VIEWPORT& GetViewport() const { return mViewport; }
 
 private:
@@ -33,7 +35,8 @@ private:
 
 	D3D11_VIEWPORT mViewport;
 
-	const ID3D11RenderTargetView* mRenderTarget;
+	ID3D11RenderTargetView* mRenderTarget;
+	ID3D11DepthStencilView* mDepthStencil;
 
 };
 

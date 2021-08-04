@@ -15,11 +15,11 @@ void GUIEntity::Slider(XMFLOAT4X4& matrix, float min, float max, const char* lab
     ImGui::SliderFloat4(label, matrix.m[3], min, max);
 }
 
-GUI* GUI::GetInstance(unsigned int width, unsigned int height)
+GUI* GUI::GetInstance(Display* display, unsigned int width, unsigned int height)
 {
     if (mInstance == nullptr)
     {
-        mInstance = new GUI(width, height);
+        mInstance = new GUI(display, width, height);
     }
 
     return mInstance;
@@ -27,17 +27,24 @@ GUI* GUI::GetInstance(unsigned int width, unsigned int height)
 
 void GUI::Draw()
 {
+    static ID3D11DeviceContext* context = Hardware::GetContext();
+    static ID3D11RenderTargetView* renderTargets[] = { mRenderTarget };
 
+    context->OMSetRenderTargets(1, renderTargets, mDepthStencil);
+
+    ImGui::Render();
     ImDrawData* drawData = ImGui::GetDrawData();
+
     ImGui_ImplDX11_RenderDrawData(drawData);
 
 }
 
 void GUI::AboutInstance(Instance* inst, float min, float max)
 {
-    ImGui::Begin(inst->GetName());
     ImGui::NewFrame();
-
+    ImGui::SetWindowSize(ImVec2(200, 200));
+    ImGui::SetWindowPos(ImVec2(50, 50));
+    ImGui::Begin(inst->GetName());
     AssetModel* model = inst->GetModel();
     const char* modelPath = model->GetPath();
 
@@ -50,13 +57,16 @@ void GUI::AboutInstance(Instance* inst, float min, float max)
     ImGui::Text("%s", modelPath);
     ImGui::Text("%s", shaderPath);
     ImGui::NewLine();
-    ImGui::SliderFloat4("Position", position, min, max);
-
+    ImGui::SliderFloat3("Position", position, min, max);
+    ImGui::End();
     ImGui::EndFrame();
 }
 
-GUI::GUI(unsigned int width, unsigned int height) : mWidth(width), mHeight(height)
+GUI::GUI(Display* display, unsigned int width, unsigned int height) : mWidth(width), mHeight(height)
 {
+    mRenderTarget = display->GetRenderTarget();
+    mDepthStencil = display->GetDepthStencil();
+
     HWND handle = Hardware::GetHandle();
     ID3D11Device* device = Hardware::GetDevice();
     ID3D11DeviceContext* context = Hardware::GetContext();

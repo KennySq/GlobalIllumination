@@ -40,7 +40,7 @@ bool Input::ReadMouse()
 	result = mMouse->GetDeviceState(sizeof(DIMOUSESTATE), reinterpret_cast<void*>(&mMouseState));
 	if (result != S_OK)
 	{
-		DebugLog("failed to get mouse state");
+	//	DebugLog("failed to get mouse state");
 
 		if ((result == DIERR_INPUTLOST) || (result == DIERR_NOTACQUIRED))
 		{
@@ -119,7 +119,7 @@ void Input::Init()
 		return;
 	}
 
-	result = mMouse->SetCooperativeLevel(handle, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	result = mMouse->SetCooperativeLevel(handle, DISCL_FOREGROUND);
 	if (result != S_OK)
 	{
 		DebugLog("faield to set mouse cooperative level");
@@ -168,14 +168,14 @@ void Input::Update(float delta)
 	bool result = ReadMouse();
 	if (result == false)
 	{
-	//	DebugLog("mouse control has been lost.");
+		DebugLog("mouse control has been lost.");
 	}
 
 
 	result = ReadKeyboard();
 	if (result == false)
 	{
-	//	DebugLog("keyboard control has been lost.");
+		DebugLog("keyboard control has been lost.");
 	}
 
 	ProcessInput();

@@ -105,6 +105,9 @@
     <ClInclude Include="GUI.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalIllumination.cpp">
@@ -183,6 +186,9 @@
       <Filter>외부 라이브러리</Filter>
     </ClCompile>
     <ClCompile Include="GUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadPool.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
